@@ -1,0 +1,67 @@
+<a href="{% url 'chat' blog.id %}"><h2 class="blog-title">{{blog.blog_title}}</h2></a>
+
+<a href="{{home}}/{{blog.tag.id}}"><b>#</b>{{ blog.tags }}</a>
+
+<div class="comments-box">
+    {% for c in comments %}
+        <div class="comments">
+            <p>{{c.user.username}}: {{c.cmt}}</p>
+        </div>
+    {% endfor  %}
+    
+    <div>
+        <form action="" method="post">
+            {% csrf_token %}
+            
+            <input type="text" name="comment" id="">
+            <input type="submit" value="Submit">
+            
+        </form>
+    </div>
+    
+</div>
+
+
+
+
+<a href="{{comment}}/{{blog.id}}">ADD COMMENTS</a>
+
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
+<input type="radio" name="" id="">
+<input type="checkbox" name="" id="">
+
+<div>
+
+    <form action=""  method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="Submit">
+    </form>  
+                          
+</div>
+
+<a href=""></a>
+
+<p>
+
+</p>
+
+<div>
+    
+</div>
+
+<style>
+
+</style>

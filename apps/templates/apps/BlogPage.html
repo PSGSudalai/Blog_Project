@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8ce9fa 0%, #8ce9fa 100%);
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+        }
+        .blog-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .blog-description {
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+        .blog-tags a {
+            margin-right: 5px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .blog-tags a:hover {
+            text-decoration: underline;
+        }
+        .comments-box {
+            margin-top: 20px;
+        }
+        .comments {
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comments p {
+            margin: 0;
+        }
+        .comments a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .comments a:hover {
+            text-decoration: underline;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        form input[type="submit"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>No of views: {{ view_count }}</p>
+        <div class="blog-content">
+            <div class="blog-card">
+                <h2 class="blog-title">{{ blogs.blog_title }}</h2>
+                <p class="blog-description">
+                    {{ blogs.blog_description }}
+                </p>
+                <p>
+                    Tags:
+                    {% for tag in blogs.tags.all %}
+                        <a href="{% url 'home' %}?q={{ tag.blog_tags }}">#{{ tag.blog_tags }}</a>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+
+        <div>
+            <b>#ADD COMMENTS</b>
+        </div>
+
+        <div class="comments-box">
+            {% for c in comments %}
+                <div class="comments">
+                    <p>{{ c.host.username }}: {{ c.text }}</p>
+                    {% if request.user == c.host or request.user.is_superuser %}
+                        <a href="{% url 'edit_cmt' c.id blogs.id %}">Edit</a>
+                        <a href="{% url 'delete_cmt' c.id blogs.id %}" >Delete</a>
+                    {% endif %}
+                    <hr>
+                </div>
+            {% endfor %}
+            <div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="ccc" placeholder="Add a comment">
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

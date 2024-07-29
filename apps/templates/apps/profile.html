@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+        .auth {
+            background: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .icon i {
+            font-size: 24px;
+        }
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+        .inner-card1, .inner-card2, .inner-card3 {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        .inner-card1 h5, .inner-card2 h5, .inner-card3 h5 {
+            margin: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .inner-card1 p, .inner-card2 p, .inner-card3 p {
+            margin: 0;
+            font-size: 24px;
+            color: #007bff;
+        }
+        .blogs {
+            padding: 20px;
+        }
+        .blog-title {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            color: #333;
+        }
+        .blog-title .buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        .button.readmore {
+            background: #007bff;
+        }
+        .button.edit {
+            background: #ffc107;
+        }
+        .button.delete {
+            background: #dc3545;
+        }
+        .button.pending {
+            background: orange;
+        }
+        .button.approved {
+            background: #28a745;
+        }
+        .button.rejected {
+            background: #dc3545;
+        }
+        @media (max-width: 768px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            .inner-card1, .inner-card2, .inner-card3 {
+                width: 90%;
+                max-width: 300px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="auth">
+        <div class="icon">
+            <i class="fa fa-user"></i>
+            {{ request.user.username }}
+            {{ request.user.first_name }} {{ request.user.last_name }}
+            {{ request.user.email }}
+        </div>
+    </div>
+    <div class="cards">
+        <div class="inner-card1">
+            <h5>Total Blogs</h5>
+            <p>{{ count }}</p>
+        </div>
+        <div class="inner-card2">
+            <h5>Approved</h5>
+            <p>{{ approved_count }}</p>
+        </div>
+        <div class="inner-card3">
+            <h5>Pending</h5>
+            <p>{{ pending_count }}</p>
+        </div>
+        <div class="inner-card3">
+            <h5>Rejected</h5>
+            <p>{{ rejected_count }}</p>
+        </div>
+    </div>
+    <div class="blogs">
+        {% for blog in blogs %}
+        <div class="blog-title">
+            Title: {{ blog.blog_title }}
+            <div class="blog-content">Content: {{ blog.blog_description|slice:":100" }}...</div>
+            <div class="buttons">
+                <a href="{{ blog.get_absolute_url }}" class="button readmore"><i class="fa fa-book-open"></i> READMORE</a>
+                <a href="{% url 'edit' blog.id %}" class="button edit"><i class="fa fa-pencil-alt"></i> Edit</a>
+                <a href="{% url 'delete' blog.id %}" class="button delete"><i class="fa fa-trash-alt"></i> Delete</a>
+                {% if blog.status == "Pending" %}
+                <a href="" class="button pending">
+                    <i class="fa fa-hourglass-half"></i> Pending
+                </a>
+                {% elif blog.status == "Approved" %}
+                <a href="" class="button approved">
+                    <i class="fa fa-check"></i> Approved
+                </a>
+                {% elif blog.status == "Rejected" %}
+                <a href="" class="button rejected">
+                    <i class="fa fa-times"></i> Rejected
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
